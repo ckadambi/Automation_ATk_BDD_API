@@ -1,0 +1,137 @@
+# Azure DevOps Pipeline for AutomationSuite
+trigger:
+  branches:
+    include:
+      - main
+      - master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  BuildConfiguration: 'Release'
+  HEADLESS: 'true'
+
+stages:
+- stage: BuildAndApi
+  displayName: Build & API Tests
+  jobs:
+  - job: BuildAndApi
+    steps:
+    - checkout: self
+    - task: UseDotNet@2
+      displayName: 'Use .NET 8'
+      inputs:
+        packageType: 'sdk'
+        version: '8.0.x'
+
+    - script: |
+        dotnet restore AutomationSuite.sln
+        dotnet build AutomationSuite.sln --configuration $(BuildConfiguration) --no-restore
+      displayName: 'Restore & Build'
+
+    - script: |
+        dotnet test ApiTests --configuration $(BuildConfiguration) --no-build --logger "trx;LogFileName=api.trx"
+      displayName: 'Run API tests'
+
+    - task: PublishTestResults@2
+      condition: always()
+      inputs:
+        testResultsFormat: VSTest
+        testResultsFiles: '**/*.trx'
+        searchFolder: '$(System.DefaultWorkingDirectory)'
+        testRunTitle: 'API Tests'
+
+- stage: UITests
+  displayName: UI Tests Matrix
+  dependsOn: BuildAndApi
+  jobs:
+  - job: UITests_Chrome
+    displayName: 'UI Tests - Chrome'
+    variables:
+      BROWSER: 'chrome'
+    steps:
+    - checkout: self
+    - task: UseDotNet@2
+      displayName: 'Use .NET 8'
+      inputs:
+        packageType: 'sdk'
+        version: '8.0.x'
+
+    - script: |
+        google-chrome --version || true
+        firefox --version || true
+      displayName: 'Browser versions'
+
+    - script: |
+        dotnet restore AutomationSuite.sln
+        dotnet build AutomationSuite.sln --configuration $(BuildConfiguration) --no-restore
+      displayName: 'Restore & Build'
+
+    - script: |
+        dotnet test UiTests --configuration $(BuildConfiguration) --no-build --logger "trx;LogFileName=ui-chrome.trx"
+      displayName: 'Run UI tests (Chrome)'
+      env:
+        BROWSER: $(BROWSER)
+        HEADLESS: $(HEADLESS)
+
+    - task: PublishBuildArtifacts@1
+      condition: always()
+      displayName: 'Publish UI Screenshots (Chrome)'
+      inputs:
+        PathtoPublish: 'UiTests/TestResults/Screenshots'
+        ArtifactName: 'ui-screenshots-chrome'
+        publishLocation: 'Container'
+
+    - task: PublishTestResults@2
+      condition: always()
+      inputs:
+        testResultsFormat: VSTest
+        testResultsFiles: '**/*.trx'
+        searchFolder: '$(System.DefaultWorkingDirectory)'
+        testRunTitle: 'UI Tests - Chrome'
+
+  - job: UITests_Firefox
+    displayName: 'UI Tests - Firefox'
+    variables:
+      BROWSER: 'firefox'
+    steps:
+    - checkout: self
+    - task: UseDotNet@2
+      displayName: 'Use .NET 8'
+      inputs:
+        packageType: 'sdk'
+        version: '8.0.x'
+
+    - script: |
+        google-chrome --version || true
+        firefox --version || true
+      displayName: 'Browser versions'
+
+    - script: |
+        dotnet restore AutomationSuite.sln
+        dotnet build AutomationSuite.sln --configuration $(BuildConfiguration) --no-restore
+      displayName: 'Restore & Build'
+
+    - script: |
+        dotnet test UiTests --configuration $(BuildConfiguration) --no-build --logger "trx;LogFileName=ui-firefox.trx"
+      displayName: 'Run UI tests (Firefox)'
+      env:
+        BROWSER: $(BROWSER)
+        HEADLESS: $(HEADLESS)
+
+    - task: PublishBuildArtifacts@1
+      condition: always()
+      displayName: 'Publish UI Screenshots (Firefox)'
+      inputs:
+        PathtoPublish: 'UiTests/TestResults/Screenshots'
+        ArtifactName: 'ui-screenshots-firefox'
+        publishLocation: 'Container'
+
+    - task: PublishTestResults@2
+      condition: always()
+      inputs:
+        testResultsFormat: VSTest
+        testResultsFiles: '**/*.trx'
+        searchFolder: '$(System.DefaultWorkingDirectory)'
+        testRunTitle: 'UI Tests - Firefox'

@@ -1,0 +1,10 @@
+{
+  "omnisharp.enableRoslynAnalyzers": true,
+  "omnisharp.useGlobalMono": "auto",
+  "csharp.suppressDotnetRestoreNotification": true,
+  "dotnet.testExplorer.showCodeLens": true,
+  "dotnet-test-explorer.testProjectPath": "**/*.sln",
+  "terminal.integrated.confirmOnExit": "never",
+  "terminal.integrated.enablePersistentSessions": false,
+  "dotnet-test-explorer.env": "${workspaceFolder}/Common/.env"
+}

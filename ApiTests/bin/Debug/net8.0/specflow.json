@@ -1,0 +1,14 @@
+{
+  "language": {
+    "feature": "en-us"
+  },
+  "bindingCulture": {
+    "language": "en-us"
+  },
+  "plugins": [
+    {
+      "name": "SpecFlow.xUnit",
+      "type": "UnitTestProvider"
+    }
+  ]
+}

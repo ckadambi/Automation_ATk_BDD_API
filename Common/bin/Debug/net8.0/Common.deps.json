@@ -1,0 +1,111 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Common/1.0.0": {
+        "dependencies": {
+          "RestSharp": "112.1.0",
+          "Selenium.Support": "4.36.0",
+          "Selenium.WebDriver": "4.36.0",
+          "Selenium.WebDriver.ChromeDriver": "141.0.7390.7600",
+          "Selenium.WebDriver.GeckoDriver": "0.36.0"
+        },
+        "runtime": {
+          "Common.dll": {}
+        }
+      },
+      "RestSharp/112.1.0": {
+        "runtime": {
+          "lib/net8.0/RestSharp.dll": {
+            "assemblyVersion": "112.1.0.0",
+            "fileVersion": "112.1.0.0"
+          }
+        }
+      },
+      "Selenium.Support/4.36.0": {
+        "dependencies": {
+          "Selenium.WebDriver": "4.36.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/WebDriver.Support.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        }
+      },
+      "Selenium.WebDriver/4.36.0": {
+        "runtime": {
+          "lib/net8.0/WebDriver.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/linux/native/selenium-manager": {
+            "rid": "linux",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx/native/selenium-manager": {
+            "rid": "osx",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win/native/selenium-manager.exe": {
+            "rid": "win",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Selenium.WebDriver.ChromeDriver/141.0.7390.7600": {},
+      "Selenium.WebDriver.GeckoDriver/0.36.0": {}
+    }
+  },
+  "libraries": {
+    "Common/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "RestSharp/112.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bOUGNZqhhv/QeCXHTKEUil846yBjwWXpzPKjO67kFvaAOoF361z7jLY5BMnuZ6WD2WQRA750sNMcK7MSPCQ5Mg==",
+      "path": "restsharp/112.1.0",
+      "hashPath": "restsharp.112.1.0.nupkg.sha512"
+    },
+    "Selenium.Support/4.36.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3/kioF20M28FKkCccmxDqMYZy9j1G4H37dcHfPgTPiOAlQXrqV/moWoV56o2TVFLhZw7o53PlsMp6Y8br9Z3lg==",
+      "path": "selenium.support/4.36.0",
+      "hashPath": "selenium.support.4.36.0.nupkg.sha512"
+    },
+    "Selenium.WebDriver/4.36.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-jYehpVsZyC8Sn6BJJ2xr8vM9QyPTDks7MdrlfZQFxs3wa8Jg4LPHPnzEYRT1CY1vSSydxhBxuDJ8tnUxrXo9Qw==",
+      "path": "selenium.webdriver/4.36.0",
+      "hashPath": "selenium.webdriver.4.36.0.nupkg.sha512"
+    },
+    "Selenium.WebDriver.ChromeDriver/141.0.7390.7600": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-26d2I6kO4VYMSELlK/ng1yFpIPb0zRpsyhe/k0ay0RXLmb2zfNRdS2BKCU2Hbtu4Jf9GUdYvxt0iQGw545DJCw==",
+      "path": "selenium.webdriver.chromedriver/141.0.7390.7600",
+      "hashPath": "selenium.webdriver.chromedriver.141.0.7390.7600.nupkg.sha512"
+    },
+    "Selenium.WebDriver.GeckoDriver/0.36.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-jUdrPcwkVt8OJon4iWv6pNTPIAdViJYB9cbd4ct0Bt2RzPzynQiN8bBUfOA1iSxTppI9SH8L1eMfg5NRijlBsw==",
+      "path": "selenium.webdriver.geckodriver/0.36.0",
+      "hashPath": "selenium.webdriver.geckodriver.0.36.0.nupkg.sha512"
+    }
+  }
+}

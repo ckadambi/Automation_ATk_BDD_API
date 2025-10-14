@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore AutomationSuite.sln
+
+      - name: Build
+        run: dotnet build AutomationSuite.sln --configuration Release --no-restore
+
+      - name: Run API tests
+        run: dotnet test ApiTests --configuration Release --no-build --logger "trx;LogFileName=api.trx"
+
+      - name: Upload API test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api-test-results
+          path: |
+            **/TestResults/**/*.trx
+            ApiTests/TestResults/**
+
+  ui-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [ chrome, firefox ]
+    env:
+      BROWSER: ${{ matrix.browser }}
+      HEADLESS: "true"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # ubuntu-latest runners provide Chrome & Firefox out-of-the-box.
+      # For robustness, print versions:
+      - name: Browser versions
+        run: |
+          google-chrome --version || true
+          firefox --version || true
+
+      - name: Restore
+        run: dotnet restore AutomationSuite.sln
+
+      - name: Build
+        run: dotnet build AutomationSuite.sln --configuration Release --no-restore
+
+      - name: Run UI tests (${{ matrix.browser }})
+        run: dotnet test UiTests --configuration Release --no-build --logger "trx;LogFileName=ui-${{ matrix.browser }}.trx"
+
+      - name: Upload UI screenshots (${{ matrix.browser }})
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui-screenshots-${{ matrix.browser }}
+          path: UiTests/TestResults/Screenshots/**
+
+      - name: Upload UI test results (${{ matrix.browser }})
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui-test-results-${{ matrix.browser }}
+          path: |
+            **/TestResults/**/*.trx
+            UiTests/TestResults/**
