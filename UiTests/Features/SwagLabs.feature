@@ -18,3 +18,9 @@ Feature: Swag Labs shopping
     Given I am on the Swag Labs login page
     When I log in with username "locked_out_user" and password "secret_sauce"
     Then I should see a login error
+
+      @realapp2 @Jira-105
+  Scenario: Failed login shows an error
+    Given I am on the Swag Labs login page
+    When I log in with username "locked_out_user" and password "secret_sauce"
+    Then I should see a login error
