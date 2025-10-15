@@ -39,8 +39,8 @@ packages/
 artifacts/
 
 # Config / Environment files
-.env
-.env.*
+# .env
+# .env.*
 config.local.json
 
 # OS-specific
