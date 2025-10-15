@@ -21,7 +21,8 @@
 
 <ItemGroup>
   <!-- Copy the .env file from the Common project into the build output -->
-  <None Include=".env">
+  <!-- <None Include=".env"> -->
+  <None Include=".env" Condition="Exists('$(MSBuildProjectDirectory)/.env')">
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </None>
 </ItemGroup>
