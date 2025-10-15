@@ -84,10 +84,16 @@ namespace UiTests.Pages.SwagLabs
             catch { return null; }
         }
 
-        private static string EnsureTrailingSlash(string url) =>
-            string.IsNullOrWhiteSpace(url) ? url : (url.EndsWith("/") ? url : url + "/");
+        private static string EnsureTrailingSlash(string url)
+        {
+            return string.IsNullOrWhiteSpace(url) ? url : (url.EndsWith("/") ? url : url + "/");
+        }
 
-        private static string Combine(string baseUrl, string relative) =>
-            string.IsNullOrWhiteSpace(relative) ? baseUrl : new Uri(new Uri(baseUrl), relative.TrimStart('/')).ToString();
+
+        private static string Combine(string baseUrl, string relative)
+        {
+            return string.IsNullOrWhiteSpace(relative) ? baseUrl : new Uri(new Uri(baseUrl), relative.TrimStart('/')).ToString();
+        }
+
     }
 }
