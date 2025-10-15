@@ -14,12 +14,17 @@ public sealed class InventoryPage : UiTests.Pages.BasePage
         string slug = itemName.ToLowerInvariant().Replace(" ", "-");
         var addBtn = By.Id($"add-to-cart-{slug}");
         Find(addBtn).Click();
+        Thread.Sleep(2000);
     }
     public int CartCount()
-    {
+    {        
         var badges = FindAll(CartBadge);
         if (badges.Count == 0) return 0;
         return int.TryParse(badges.First().Text, out var n) ? n : 0;
     }
-    public void OpenCart() => Find(CartLink).Click();
+    public void OpenCart()
+    {
+        Thread.Sleep(2000);
+        Find(CartLink).Click();
+    }
 }
