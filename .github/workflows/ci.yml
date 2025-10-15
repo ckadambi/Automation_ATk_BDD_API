@@ -23,6 +23,24 @@ jobs:
       - name: Build
         run: dotnet build AutomationSuite.sln --configuration Release --no-restore
 
+  # ✅ Separate API test job
+  api-tests:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore AutomationSuite.sln
+
+      - name: Build
+        run: dotnet build AutomationSuite.sln --configuration Release --no-restore
+
       - name: Run API tests
         run: dotnet test ApiTests --configuration Release --no-build --logger "trx;LogFileName=api.trx"
 

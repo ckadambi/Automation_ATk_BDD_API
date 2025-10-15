@@ -11,14 +11,28 @@ pool:
 variables:
   BuildConfiguration: 'Release'
   HEADLESS: 'true'
+  TEST_ENVIRONMENT: 'qa'     # choose: dev/qa/stage/prod
+  # Optional: set this in Library (Variables) or at pipeline level as a secret
+  # API_BASE_URL: 'https://qa-api.example.com'
 
 stages:
+# ===================== BUILD + API TESTS =====================
 - stage: BuildAndApi
   displayName: Build & API Tests
   jobs:
   - job: BuildAndApi
+    displayName: Build & Run API tests
     steps:
     - checkout: self
+
+    - task: Cache@2
+      displayName: 'Cache NuGet'
+      inputs:
+        key: 'nuget | "$(Agent.OS)" | **/*.csproj'
+        restoreKeys: |
+          nuget | "$(Agent.OS)"
+        path: ~/.nuget/packages
+
     - task: UseDotNet@2
       displayName: 'Use .NET 8'
       inputs:
@@ -26,13 +40,22 @@ stages:
         version: '8.0.x'
 
     - script: |
+        dotnet --info
         dotnet restore AutomationSuite.sln
         dotnet build AutomationSuite.sln --configuration $(BuildConfiguration) --no-restore
       displayName: 'Restore & Build'
 
     - script: |
-        dotnet test ApiTests --configuration $(BuildConfiguration) --no-build --logger "trx;LogFileName=api.trx"
+        dotnet test ApiTests \
+          --configuration $(BuildConfiguration) \
+          --no-build \
+          --logger "trx;LogFileName=api.trx" \
+          -v n
       displayName: 'Run API tests'
+      env:
+        TEST_ENVIRONMENT: $(TEST_ENVIRONMENT)
+        # If you set API_BASE_URL as a (secret) variable in the pipeline/library, it wins over config.json:
+        API_BASE_URL: $(API_BASE_URL)
 
     - task: PublishTestResults@2
       condition: always()
@@ -42,16 +65,39 @@ stages:
         searchFolder: '$(System.DefaultWorkingDirectory)'
         testRunTitle: 'API Tests'
 
+    - task: PublishPipelineArtifact@1
+      condition: always()
+      displayName: 'Publish API TestResults folder'
+      inputs:
+        targetPath: '$(System.DefaultWorkingDirectory)/ApiTests/TestResults'
+        artifact: 'api-test-results'
+        publishLocation: 'pipeline'
+
+# ===================== UI TESTS (MATRIX) =====================
 - stage: UITests
   displayName: UI Tests Matrix
   dependsOn: BuildAndApi
   jobs:
-  - job: UITests_Chrome
-    displayName: 'UI Tests - Chrome'
-    variables:
-      BROWSER: 'chrome'
+  - job: UITests
+    displayName: 'UI Tests'
+    strategy:
+      matrix:
+        chrome:
+          BROWSER: 'chrome'
+        firefox:
+          BROWSER: 'firefox'
+      maxParallel: 2
     steps:
     - checkout: self
+
+    - task: Cache@2
+      displayName: 'Cache NuGet'
+      inputs:
+        key: 'nuget | "$(Agent.OS)" | **/*.csproj'
+        restoreKeys: |
+          nuget | "$(Agent.OS)"
+        path: ~/.nuget/packages
+
     - task: UseDotNet@2
       displayName: 'Use .NET 8'
       inputs:
@@ -69,19 +115,35 @@ stages:
       displayName: 'Restore & Build'
 
     - script: |
-        dotnet test UiTests --configuration $(BuildConfiguration) --no-build --logger "trx;LogFileName=ui-chrome.trx"
-      displayName: 'Run UI tests (Chrome)'
+        dotnet test UiTests \
+          --configuration $(BuildConfiguration) \
+          --no-build \
+          --logger "trx;LogFileName=ui-$(BROWSER).trx" \
+          -v n
+      displayName: 'Run UI tests ($(BROWSER))'
       env:
+        TEST_ENVIRONMENT: $(TEST_ENVIRONMENT)
         BROWSER: $(BROWSER)
         HEADLESS: $(HEADLESS)
 
-    - task: PublishBuildArtifacts@1
+    # Publish screenshots if they exist (avoid failing when folder is empty)
+    - bash: |
+        if [ -d "UiTests/TestResults/Screenshots" ]; then
+          echo "Screenshots found."
+        else
+          echo "No screenshots to publish."
+          mkdir -p UiTests/TestResults/Screenshots
+        fi
+      displayName: 'Ensure screenshots folder exists'
       condition: always()
-      displayName: 'Publish UI Screenshots (Chrome)'
+
+    - task: PublishPipelineArtifact@1
+      condition: always()
+      displayName: 'Publish UI Screenshots ($(BROWSER))'
       inputs:
-        PathtoPublish: 'UiTests/TestResults/Screenshots'
-        ArtifactName: 'ui-screenshots-chrome'
-        publishLocation: 'Container'
+        targetPath: 'UiTests/TestResults/Screenshots'
+        artifact: 'ui-screenshots-$(BROWSER)'
+        publishLocation: 'pipeline'
 
     - task: PublishTestResults@2
       condition: always()
@@ -89,49 +151,4 @@ stages:
         testResultsFormat: VSTest
         testResultsFiles: '**/*.trx'
         searchFolder: '$(System.DefaultWorkingDirectory)'
-        testRunTitle: 'UI Tests - Chrome'
-
-  - job: UITests_Firefox
-    displayName: 'UI Tests - Firefox'
-    variables:
-      BROWSER: 'firefox'
-    steps:
-    - checkout: self
-    - task: UseDotNet@2
-      displayName: 'Use .NET 8'
-      inputs:
-        packageType: 'sdk'
-        version: '8.0.x'
-
-    - script: |
-        google-chrome --version || true
-        firefox --version || true
-      displayName: 'Browser versions'
-
-    - script: |
-        dotnet restore AutomationSuite.sln
-        dotnet build AutomationSuite.sln --configuration $(BuildConfiguration) --no-restore
-      displayName: 'Restore & Build'
-
-    - script: |
-        dotnet test UiTests --configuration $(BuildConfiguration) --no-build --logger "trx;LogFileName=ui-firefox.trx"
-      displayName: 'Run UI tests (Firefox)'
-      env:
-        BROWSER: $(BROWSER)
-        HEADLESS: $(HEADLESS)
-
-    - task: PublishBuildArtifacts@1
-      condition: always()
-      displayName: 'Publish UI Screenshots (Firefox)'
-      inputs:
-        PathtoPublish: 'UiTests/TestResults/Screenshots'
-        ArtifactName: 'ui-screenshots-firefox'
-        publishLocation: 'Container'
-
-    - task: PublishTestResults@2
-      condition: always()
-      inputs:
-        testResultsFormat: VSTest
-        testResultsFiles: '**/*.trx'
-        searchFolder: '$(System.DefaultWorkingDirectory)'
-        testRunTitle: 'UI Tests - Firefox'
+        testRunTitle: 'UI Tests - $(BROWSER)'
