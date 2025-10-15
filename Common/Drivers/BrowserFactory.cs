@@ -19,6 +19,18 @@ namespace Common.Drivers
         private static IWebDriver CreateChrome(bool headless)
         {
             var opts = new ChromeOptions();
+            opts.AddUserProfilePreference("credentials_enable_service", false);
+            opts.AddUserProfilePreference("profile.password_manager_enabled", false);
+            opts.AddUserProfilePreference("autofill.profile_enabled", false);
+            opts.AddUserProfilePreference("autofill.credit_card_enabled", false);
+            // Newer Chrome (belt & suspenders):
+            opts.AddUserProfilePreference("autofill.enabled", false);
+            opts.AddUserProfilePreference("autofill.password_enabled", false);
+
+            //  Run Incognito (Chrome does NOT offer to save passwords in incognito)
+            opts.AddArgument("--incognito");
+            // Disable related UI surfaces via features
+            opts.AddArgument("--disable-features=PasswordManagerOnboarding,AutofillServerCommunication");
 
             if (headless)
             {
@@ -55,6 +67,10 @@ namespace Common.Drivers
         private static IWebDriver CreateFirefox(bool headless)
         {
             var opts = new FirefoxOptions();
+            opts.SetPreference("signon.rememberSignons", false);
+            opts.SetPreference("signon.autofillForms", false);
+            opts.SetPreference("signon.passwordEditCapture.enabled", false);
+
 
             if (headless)
             {
@@ -84,6 +100,6 @@ namespace Common.Drivers
 
             return driver;
         }
-       
+
     }
 }

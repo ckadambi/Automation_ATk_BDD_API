@@ -36,30 +36,10 @@ namespace UiTests.Hooks
             _driver = BrowserFactory.Create(chosen, TestConfig.Headless);
             _container.RegisterInstanceAs<IWebDriver>(_driver);
 
-
-
-            //                         var browserFromEnv = Environment.GetEnvironmentVariable("BROWSER");
-            // var browserFromTag = _scenarioContext.ScenarioInfo.Tags
-            //     .FirstOrDefault(t => t.StartsWith("browser:", StringComparison.OrdinalIgnoreCase))
-            //     ?.Split(':').Last();
-
-            // // Prefer shell env, else tag, else TestConfig default
-            // var chosen = !string.IsNullOrWhiteSpace(browserFromEnv)
-            //     ? browserFromEnv
-            //     : (browserFromTag ?? TestConfig.Browser);
-
-            // _driver = BrowserFactory.Create(chosen, TestConfig.Headless);
-
             Console.WriteLine($"[UiTests] Browser={chosen}, Headless={TestConfig.Headless}");
-        }
-
-        // [AfterScenario(Order = 100)]
-        // public void AfterScenario()
-        // {
-        //     try { _driver?.Quit(); _driver?.Dispose(); } catch { }
-        // }
+        }        
         
-         [AfterScenario(Order = -1000)] // run BEFORE quitting the driver
+        [AfterScenario(Order = -1000)] // run BEFORE quitting the driver
         public void TakeScreenshotOnFailure()
         {
             try
