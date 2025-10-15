@@ -17,29 +17,25 @@ namespace ApiTests.Steps
         // If you want to inspect tags later, you can inject ScenarioContext here too.
         public ApiSteps() { }
 
+
         [Given(@"the API base url is default")]
         public void GivenTheApiBaseUrlIsDefault()
         {
-            // Resolves from config.json environments, overridden by TEST_ENVIRONMENT env var if present.
+            // 🔹 Dynamically load from TestConfig (.env or config.json)
+            var env = TestConfig.EnvironmentName;
             _baseUrl = TestConfig.ApiBaseUrl;
-            _api = new ApiClient(_baseUrl);
-            Console.WriteLine($"[ApiSteps] Base URL = {_baseUrl} (env={TestConfig.EnvironmentName})");
-        }
 
-        [Given(@"the test environment is ""(.*)""")]
-        public void GivenTheTestEnvironmentIs(string env)
-        {
-            // Optional step if you prefer to set env via a step instead of a tag
-            Environment.SetEnvironmentVariable("TEST_ENVIRONMENT", env);
-            _baseUrl = TestConfig.ApiBaseUrl;
+            // 🔹 Log for clarity
+            Console.WriteLine($"[ApiTests] Using API Base URL: {_baseUrl} (Environment={env})");
+
+            // 🔹 Initialize RestSharp client
             _api = new ApiClient(_baseUrl);
-            Console.WriteLine($"[ApiSteps] Switched env to '{env}', Base URL = {_baseUrl}");
         }
 
         [When(@"I GET ""(.*)""")]
         public async Task WhenIGet(string path)
         {
-            _api.Should().NotBeNull("API client must be initialized via a Given step");
+            _api.Should().NotBeNull("API client should be initialized");
             _response = await _api!.GetAsync(path);
         }
 

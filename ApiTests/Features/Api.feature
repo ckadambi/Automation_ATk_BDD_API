@@ -3,7 +3,7 @@ Feature: Public API smoke checks
   I want to validate a public API
   So that I can assert contract and data quickly
 
-  @api
+  @api @Jira-200
   Scenario: GET a post from JSONPlaceholder
     Given the API base url is default
     When I GET "/posts/1"

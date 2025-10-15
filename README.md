@@ -166,7 +166,7 @@ $env:TEST_ENVIRONMENT="qa"; $env:BROWSER="chrome"; dotnet test UiTests
 
 
 
-Command to run test on specific env and browser
+## Command to run test on specific env and browser
   - $env:TEST_ENVIRONMENT="qa"; $env:BROWSER="chrome"; dotnet test UiTests --filter "Category=Jira-123"
 
 For headless(currently defaulted to false)-
@@ -176,3 +176,51 @@ in .env set as per env and browser-
 TEST_ENVIRONMENT=qa
 BROWSER=chrome/firefox
 HEADLESS=false
+
+## setup
+1. Insall Vs code
+2. install .Net8.* in system
+3. Install Git hub in system, add extension in vs code
+4. Set username and email global/local-
+  git config --global user.name "Your Name"
+  git config --global user.email "your_email@example.com"
+
+  cd path/to/your/project
+  git config user.name "Your Name"
+  git config user.email "your_email@example.com"
+
+5. Connect to repo using below command in terminal and project folder- 
+  git init
+  git remote add origin https://github.com/ckadambi/Automation_ATk_BDD_API.git
+  git remote -v
+  ## to push code/checkout
+  git checkout -b main
+  git push -u origin main
+
+## Ignore unwanted file
+  Simple 3-Step Permanent Fix
+
+1️⃣ Make sure the .gitignore is in the root of your repo
+
+AutomationSuite/.gitignore
+AutomationSuite/AutomationSuite.sln
+
+2️⃣ Tell Git to re-index using the ignore rules
+
+cd AutomationSuite
+git rm -r --cached .
+git add .
+git commit -m "Apply .gitignore and re-index project"
+
+3️⃣ Verify
+git status
+
+Now rebuild:
+
+dotnet clean
+dotnet build
+
+→ The build output (bin/, obj/, TestResults/, Screenshots/, etc.) will remain on disk but will no longer appear as “Changes” in Git.
+
+
+  
