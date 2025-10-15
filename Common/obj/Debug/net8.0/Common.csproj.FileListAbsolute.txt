@@ -8,6 +8,7 @@ C:\Users\ckadambi\OneDrive - Altimetrik Corp\Everything\Work General\Solutions\A
 C:\Users\ckadambi\OneDrive - Altimetrik Corp\Everything\Work General\Solutions\AutomationSuite_with_ci\Common\obj\Debug\net8.0\Common.AssemblyInfoInputs.cache
 C:\Users\ckadambi\OneDrive - Altimetrik Corp\Everything\Work General\Solutions\AutomationSuite_with_ci\Common\obj\Debug\net8.0\Common.AssemblyInfo.cs
 C:\Users\ckadambi\OneDrive - Altimetrik Corp\Everything\Work General\Solutions\AutomationSuite_with_ci\Common\obj\Debug\net8.0\Common.csproj.CoreCompileInputs.cache
+C:\Users\ckadambi\OneDrive - Altimetrik Corp\Everything\Work General\Solutions\AutomationSuite_with_ci\Common\obj\Debug\net8.0\Common.sourcelink.json
 C:\Users\ckadambi\OneDrive - Altimetrik Corp\Everything\Work General\Solutions\AutomationSuite_with_ci\Common\obj\Debug\net8.0\Common.dll
 C:\Users\ckadambi\OneDrive - Altimetrik Corp\Everything\Work General\Solutions\AutomationSuite_with_ci\Common\obj\Debug\net8.0\refint\Common.dll
 C:\Users\ckadambi\OneDrive - Altimetrik Corp\Everything\Work General\Solutions\AutomationSuite_with_ci\Common\obj\Debug\net8.0\Common.pdb

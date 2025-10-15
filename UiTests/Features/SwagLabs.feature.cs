@@ -163,6 +163,41 @@ namespace UiTests.Features
             this.ScenarioCleanup();
         }
         
+        [Xunit.SkippableFactAttribute(DisplayName="Failed login shows an errors")]
+        [Xunit.TraitAttribute("FeatureTitle", "Swag Labs shopping")]
+        [Xunit.TraitAttribute("Description", "Failed login shows an errors")]
+        [Xunit.TraitAttribute("Category", "realapp2")]
+        [Xunit.TraitAttribute("Category", "Jira-105")]
+        public void FailedLoginShowsAnErrors()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "realapp2",
+                    "Jira-105"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Failed login shows an errors", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 23
+  this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 24
+    testRunner.Given("I am on the Swag Labs login page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 25
+    testRunner.When("I log in with username \"locked_out_user\" and password \"secret_sauce\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 26
+    testRunner.Then("I should see a login error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
         [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
         [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
         public class FixtureData : System.IDisposable

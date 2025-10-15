@@ -114,6 +114,7 @@ C:\Users\ckadambi\OneDrive - Altimetrik Corp\Everything\Work General\Solutions\A
 C:\Users\ckadambi\OneDrive - Altimetrik Corp\Everything\Work General\Solutions\AutomationSuite_with_ci\ApiTests\obj\Debug\net8.0\ApiTests.AssemblyInfoInputs.cache
 C:\Users\ckadambi\OneDrive - Altimetrik Corp\Everything\Work General\Solutions\AutomationSuite_with_ci\ApiTests\obj\Debug\net8.0\ApiTests.AssemblyInfo.cs
 C:\Users\ckadambi\OneDrive - Altimetrik Corp\Everything\Work General\Solutions\AutomationSuite_with_ci\ApiTests\obj\Debug\net8.0\ApiTests.csproj.CoreCompileInputs.cache
+C:\Users\ckadambi\OneDrive - Altimetrik Corp\Everything\Work General\Solutions\AutomationSuite_with_ci\ApiTests\obj\Debug\net8.0\ApiTests.sourcelink.json
 C:\Users\ckadambi\OneDrive - Altimetrik Corp\Everything\Work General\Solutions\AutomationSuite_with_ci\ApiTests\obj\Debug\net8.0\ApiTests.csproj.Up2Date
 C:\Users\ckadambi\OneDrive - Altimetrik Corp\Everything\Work General\Solutions\AutomationSuite_with_ci\ApiTests\obj\Debug\net8.0\ApiTests.dll
 C:\Users\ckadambi\OneDrive - Altimetrik Corp\Everything\Work General\Solutions\AutomationSuite_with_ci\ApiTests\obj\Debug\net8.0\refint\ApiTests.dll
